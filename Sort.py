@@ -1,4 +1,5 @@
 from Testing import Test
+import random
 
 
 class Sort:
@@ -13,33 +14,25 @@ class Sort:
     def quicksort(self, l):
         if len(l) <= 1:
             return l
-        i, n, pivot = 0, len(l)-1, l[-1]
 
-        while i < n:
-            while l[i] <= pivot:
-                i += 1
-                if i == n:
-                    break
+        p = random.randint(0, len(l)-1)
 
-            j = i+1
+        """
+        Here, what we do it perform a partition around the pivot
 
-            if i == n:
-                break
+        s = All values in l that are less than or equal to the pivot
+        g = All values in l that are greater than the pivot
+        """
+        s = [l[n]
+             for n in range(len(l)) if l[n] <= l[p] and n != p]
+        g = [l[n]
+             for n in range(len(l)) if l[n] > l[p] and n != p]
 
-            while l[j] > pivot:
-                j += 1
+        l = s + [l[p]] + g
+        left = self.quicksort(l[:len(s)])
+        right = self.quicksort(l[len(s)+1:])
 
-            temp = l[i]
-            l[i] = l[j]
-            l[j] = temp
-
-            if l[i] == pivot:
-                break
-            i += 1
-        left = self.quicksort(l[:i])
-        right = self.quicksort(l[i+1:])
-
-        return left + [pivot] + right
+        return left + [l[p]] + right
 
     def mergesort(self, l):
         n = len(l)
@@ -75,5 +68,5 @@ class Sort:
 
 sort = Sort()
 test = Test()
-print(test.time(sort.mergesort, [1, 2, 3, 4, 55, 6, 7, 7, 2, 3]))
+# print(test.time(sort.mergesort, [1, 2, 3, 4, 55, 6, 7, 7, 2, 3]))
 print(test.time(sort.quicksort, [1, 2, 3, 4, 55, 6, 7, 7, 2, 3]))
