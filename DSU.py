@@ -15,6 +15,15 @@ class DSU:
             self.groups[a] = self.find(self.groups[a])
         return a
 
+    def getSize(self, a):
+        res = 0
+        root_a = self.find(a)
+        for i in range(self.n):
+            if self.find(i) == root_a:
+                print(i)
+                res += self.ranks[i]
+        return res
+
     def union(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
         if self.ranks[root_a] > self.ranks[root_b]:
@@ -28,4 +37,6 @@ class DSU:
 dsu = DSU(7)
 dsu.union(2, 5)
 dsu.union(4, 2)
+dsu.union(2, 1)
+print(dsu.getSize(5))
 print((dsu.find(4) == dsu.find(4)))

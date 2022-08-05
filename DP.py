@@ -86,4 +86,4 @@ Knapsack Problem
 # visualize_2d_table(knapsack(capacity, weights, profits)[1])
 
 
-egg_drop(2, 36)
+egg_drop(2, 5)
