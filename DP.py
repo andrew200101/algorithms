@@ -3,14 +3,14 @@ def knapsack(capacity, weight, profits):
     W, n = capacity, len(weight)
     dp = [[0 for _ in range(W+1)] for _ in range(n+1)]
 
-    for j in range(1, n+1):
+    for j in range(n):
         for w in range(1, W+1):
-            if weight[j-1] <= w:
-                dp[j][w] = max(dp[j-1][w], dp[j-1]
-                               [w-weight[j-1]] + profits[j-1])
+            if weight[j] <= w:
+                dp[j+1][w] = max(dp[j][w], dp[j]
+                                 [w-weight[j]] + profits[j])
 
             else:
-                dp[j][w] = dp[j-1][w]
+                dp[j+1][w] = dp[j][w]
 
     return dp[n][W], dp
 
@@ -79,11 +79,46 @@ def visualize_2d_table(table):
 """
 Knapsack Problem
 """
-# capacity = 165
-# weights = [23, 31, 29, 44, 53, 38, 63, 85, 89, 82]
-# profits = [92, 57, 49, 68, 60, 43, 67, 84, 87, 72]
 
 # visualize_2d_table(knapsack(capacity, weights, profits)[1])
 
+# def knapsack_1(capacity, weights, profits):
 
-egg_drop(2, 5)
+#     """
+#     state = max profit at weight i
+#     Take or not to take item i?
+
+#     Take: dp[i] = dp
+#     dp[i] =
+#     """
+
+
+# egg_drop(2, 5)
+
+def k2(weights, profits, capacity):
+    """
+    State dp(i,j) = The maximum  profit at capacity i using weights up to j
+    Transition (i,j): we need to determine whether to use item j or not to reach optimal profit given capacity i
+
+                    If we use, then dp(i,j) = dp(i-weights[j],j) + profit[j]
+                    What this means is that we are using the best dp val at capacity i-current_weight + the profit of the current item
+
+                    Or we don't use it and simply to dp(i,j) = dp(i, j-1)
+    """
+    n = len(weights)
+    dp = [[0 for _ in range(n+1)] for _ in range(capacity+1)]
+
+    for i in range(1, capacity+1):
+        for j in range(n):
+            if weights[j] <= capacity:
+                dp[i][j+1] = max(dp[i][j], dp[i-weights[j]][j] + profits[j])
+            else:
+                dp[i][j+1] = dp[i][j]
+
+    return dp[capacity][n]
+
+
+capacity = 50
+weights = [10, 20, 30]
+profits = [60, 100, 120]
+print(k2(weights, profits, capacity))
