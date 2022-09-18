@@ -1,4 +1,7 @@
 
+from tkinter import W
+
+
 def knapsack(capacity, weight, profits):
     W, n = capacity, len(weight)
     dp = [[0 for _ in range(W+1)] for _ in range(n+1)]
@@ -13,6 +16,20 @@ def knapsack(capacity, weight, profits):
                 dp[j+1][w] = dp[j][w]
 
     return dp[n][W], dp
+
+
+def knapsack_1(c, w, p):
+    dp = [[0 for _ in range(c+1)] for _ in range(len(w))]
+    dp[0] = [p[0] if w[0] <= i else 0 for i in range(c+1)]
+    for i in range(1, len(w)):
+        for j in range(c+1):
+            if j >= w[i]:
+                dp[i][j] = max(dp[i-1][j-w[i]] + p[i], dp[i-1][j])
+            else:
+                dp[i][j] = dp[i-1][j]
+
+    visualize_2d_table(dp)
+    return dp[-1][-1]
 
 
 def egg_drop(k, n):
@@ -118,7 +135,7 @@ def k2(weights, profits, capacity):
     return dp[capacity][n]
 
 
-capacity = 50
-weights = [10, 20, 30]
-profits = [60, 100, 120]
-print(k2(weights, profits, capacity))
+capacity = 10
+weights = [1, 2, 3, 4, 2, 4]
+profits = [60, 100, 120, 80, 72, 39]
+print(knapsack_1(capacity, weights, profits))
