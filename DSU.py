@@ -4,6 +4,7 @@ from argparse import ArgumentError
 class DSU:
     def __init__(self, n):
         self.n = n
+        self.sz = n
         self.groups = [i for i in range(n)]
         self.ranks = [1 for _ in range(n)]
 
@@ -15,17 +16,14 @@ class DSU:
             self.groups[a] = self.find(self.groups[a])
         return a
 
-    def getSize(self, a):
-        res = 0
-        root_a = self.find(a)
-        for i in range(self.n):
-            if self.find(i) == root_a:
-                print(i)
-                res += self.ranks[i]
-        return res
+    def getNumberGroups(self):
+        return self.sz
 
     def union(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.count -= 1
+
         if self.ranks[root_a] > self.ranks[root_b]:
             self.groups[root_b] = root_a
         else:
@@ -34,38 +32,44 @@ class DSU:
                 self.ranks[root_b] += 1
 
 
-dsu = DSU(7)
-dsu.union(2, 5)
-dsu.union(4, 2)
-dsu.union(2, 1)
-print(dsu.getSize(5))
-print((dsu.find(4) == dsu.find(4)))
+class DSUAdd:
+    def __init__(self):
+        self.groups = {}
+        self.weights = {}
+        self.sz = 0
 
+    def add(self, p):
+        hashed_p = p
+        self.groups[hashed_p] = hashed_p
+        self.weights[hashed_p] = 1
+        self.sz += 1
 
-class DSU:
-    def __init__(self, n):
-        self.n = n
-        self.groups = [i for i in range(n)]
-        self.ranks = [1 for _ in range(n)]
+    def find(self, p):
+        hashed_p = p
+        if self.groups[hashed_p] != hashed_p:
+            self.groups[hashed_p] = self.find(self.groups[hashed_p])
+        return hashed_p
 
-    def find(self, a):
-        if self.groups[a] != a:
-            self.groups[a] = self.find(self.groups[a])
-        return self.groups[a]
+    def union(self, p, q):
+        root_p = self.find(self.groups[p])
+        root_q = self.find(self.groups[p])
 
-    def union(self, a, b):
-        root_a, root_b = self.find(a), self.find(b)
+        if root_p == root_q:
+            return
 
-        if self.ranks[root_a] > self.ranks[root_b]:
-            self.groups[root_b] = root_a
+        if self.weights[root_q] > self.weights[root_p]:
+            self.groups[root_p] = root_q
         else:
-            self.groups[root_a] = root_b
-            if self.ranks[root_a] == self.ranks[root_b]:
-                self.ranks[root_b] += 1
+            self.groups[root_q] = root_p
+            if self.weights[root_q] == self.weights[root_p]:
+                self.weights[root_p] += 1
+        self.sz -= 1
 
-    def getSize(self, a):
-        counter = 0
-        for i in range(self.n):
-            if self.find(i) == self.find(a):
-                counter += 1
-        return counter
+
+dsu = DSUAdd()
+dsu.add((1, 1))
+dsu.add((2, 2))
+print(dsu.groups)
+# dsu.union((1, 1), (2, 2))
+
+print(dsu.sz)
