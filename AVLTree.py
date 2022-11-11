@@ -22,32 +22,24 @@ class AVL:
                               self.get_height(root.right))
 
         balance = self.get_balance(root)
-
         if balance > 1 and self.get_balance(root.left) > 0:
             return self.rightRotate(root)
-
         elif balance > 1 and self.get_balance(root.left) < 0:
             self.leftRotate(root.left)
             return self.rightRotate(root)
-
         elif balance < -1 and self.get_balance(root.right) > 0:
             self.rightRotate(root.right)
             return self.leftRotate(root)
-
         elif balance < -1 and self.get_balance(root.right) < 0:
             return self.leftRotate(root)
-
         return root
 
     def leftRotate(self, root):
-
         pivot = root.right
         transfer_child = pivot.left
-
         # Perform rotation
         pivot.left = root
         root.right = transfer_child
-
         # Update heights
         root.height = 1 + max(self.getHeight(root.left),
                               self.getHeight(root.right))
@@ -80,13 +72,12 @@ class AVL:
         return root.height
 
     def get_balance(self, root):
-        return self.get_height(root.left)-self.get_height(root.right)
+        return self.get_height(root.left) -\
+            self.get_height(root.right)
 
     def preOrder(self, root):
-
         if not root:
             return
-
         print(root.val)
         self.preOrder(root.left)
         self.preOrder(root.right)

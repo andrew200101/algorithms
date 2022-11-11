@@ -6,7 +6,6 @@ class SegmentTreeNode:
         self.left, self.right = None, None
         self.sum = 0
 
-
 class SegmentTree:
     def __init__(self, arr):
         self.root = self.construct(arr, 0, len(arr)-1)
@@ -32,6 +31,23 @@ class SegmentTree:
         node.sum = node.left.sum + node.right.sum
         return node
 
+    def update(self, idx, val):
+        return self._update(self.root, idx, val)
+
+    def _update(self, node, idx, val):
+        if node.l == node.r:
+            node.val = val
+            return node
+        mid = (node.l+node.r)//2
+
+        if idx <= mid:
+            node.left = self.update(node.left, idx, val)
+        else:
+            node.right = self.update(node.right, idx, val)
+
+        node.sum = node.left.sum + node.right.sum
+        return node
+
     def getSum(self, l, r):
         return self._getSum(self.root, l, r)
 
@@ -41,7 +57,8 @@ class SegmentTree:
         elif l < root.l or r > root.r:
             return 0
         else:
-            return self._getSum(root.left, l, r) + self._getSum(root.right, l, r)
+            return self._getSum(root.left, l, r) + 
+            self._getSum(root.right, l, r)
 
 
 s = SegmentTree([1, 2, 3, 4, 5])
