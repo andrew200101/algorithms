@@ -21,6 +21,8 @@ class DSU:
 
     def union(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
+        if root_a == root_b:
+            return
         if self.ranks[root_a] > self.ranks[root_b]:
             self.groups[root_b] = root_a
             self.size[root_a] += self.size[root_b]
